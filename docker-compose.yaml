@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+    alpine:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: carstore_php
+        restart: on-failure
+        ports:
+            - "1234:80"
+        volumes:
+            - ./conf/site.conf:/etc/nginx/http.d/default.conf
+            - ./carstore:/var/www/html
+        networks:
+            - acpSymfony
+
+    db:
+        image: mariadb:10.8.2
+        container_name: carstore_db
+        restart: always
+        volumes:
+            - db-data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_PASS}
+        networks:
+            - acpSymfony
+
+    phpmyadmin:
+        image: phpmyadmin:latest
+        container_name: carstore_pma
+        restart: always
+        ports:
+            - '8080:80'
+        environment:
+            # demande le nom du server
+            #- PMA_ARBITRARY=1
+            # Pour ne pas avoir à préciser le nom du server
+            - PMA_HOST=db
+            - PMA_PASSWORD=${PMA_PASS}
+        depends_on:
+            - db
+        networks:
+            - acpSymfony
+
+volumes:
+    db-data:
+
+networks:
+    acpSymfony:
