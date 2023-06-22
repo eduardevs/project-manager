@@ -9,15 +9,27 @@
 </style>
 
 <div class="example-wrapper">
+
 <table class="table">
+        {% include "_search_data.html.twig" with {form: form ?? null} only %}
+
+    <div class="flash-info">
+        {% for fail in app.flashes('failed') %}
+            {{ fail }}
+        {% endfor %}
+        {% for bravo in app.flashes('success') %}
+            {{ bravo }}
+        {% endfor %}
+    </div>
         <thead>
             <tr>
                 <th scope="col">id</th>
                 <th scope="col">Name</th>
                 <th scope="col">Price</th>
-
-                <th scope="col">Number Seats</th>
-                <th scope="col">Number Doors</th>
+                <th scope="col">Category</th>
+                <th scope="col">Details</th>
+                <th scope="col">Update</th>
+                <th scope="col">Delete</th>
 
             </tr>
         </thead>
@@ -29,20 +41,19 @@
                 <td>{{car.id}}</td>
                 <td>{{car.name}}</td>
                 <td>{{car.cost}}</td>
-                <td>{{car.nbSeats}}</td>
-                <td>{{car.nbDoors}}</td>
+                <td>{{car.category ? car.category : 'not defined'}}</td>
+
+                 <td>
+                    <a href="{{path('app_single_car', { id: car.id })}}" class="btn btn-info">See details</a>
+                    {# add button back from single page #}
+                </td>
 
                 <td>
-                    {# {{user.createdAt|date('d/m/Y')}} #}
+                    <a href="{{path('app_edit_car', { id: car.id })}}" class="btn btn-success">Edit</a>
+
                 </td>
                 <td>
-                    {# {{user.roles|join(' ')}} #}
-                </td>
-                <td>
-                    {# <a href="{{path('user_edit', { id: user.id })}}" class="btn btn-info">Modifier</a> #}
-                </td>
-                <td>
-                    {# {{ include('admin/users/_delete.html.twig') }} #}
+                    {{ include('admin/cars/_delete.html.twig') }}
                 </td>
 
             </tr>
