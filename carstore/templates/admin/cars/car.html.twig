@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CarController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <div class="row">
+    {% if car %}
+    <ul>
+        <li><strong>Model's name :</strong> {{car.name}}</li>
+        <li><strong>Price :</strong> {{ car.cost }}</li>
+        <li><strong>Seats :</strong> {{ car.nbSeats }}</li>
+        <li><strong>Doors :</strong> {{ car.nbDoors }}</li>
+        <li><strong>Category :</strong>
+            {% if car.category == true %}
+                {{car.category}}
+            {% else %}
+                <p>None</p>
+            {% endif %}
+        </li>
+    </ul>
+    {% else %}
+    {# template part here #}
+        <span>Car not found</span>
+    {% endif %}
+
+    </div>
+
+
+
+</div>
+{% endblock %}
