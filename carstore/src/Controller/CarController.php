@@ -6,13 +6,15 @@ use App\Entity\Car;
 use App\Form\CarType;
 use App\Form\SearchType;
 use App\Model\SearchData;
+use App\Service\MeteoService;
 use App\Repository\CarRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Service\MeteoService;
+
 
 class CarController extends AbstractController
 {
@@ -25,33 +27,36 @@ class CarController extends AbstractController
     }
 
     #[Route('/', name: 'app_admin', methods: ['GET'])]
-    public function index(CarRepository $repository, Request $request): Response
+    public function index(CarRepository $repository, Request $request, PaginatorInterface $paginator): Response
     {
         // Filters
         $searchData = new SearchData();
+        $pagination = $repository->findBySearch($searchData, $paginator);
+        
         // Form
         $form = $this->createForm(SearchType::class, $searchData);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $searchData->page = $request->query->getInt('page', 1);
             $cars = $repository->findBySearch($searchData);
-
+    
             return $this->render('cars/main.html.twig', [
                 'form' => $form->createView(),
-                'cars' => $cars,
+                'cars' => $repository->findAll(),
                 'weather' => $this->weather,
+                'pagination' => $pagination
             ]);
         }
-
+    
         return $this->render('cars/main.html.twig', [
             'controller_name' => 'CarController',
-            'cars' => $repository->findAll(),
             'weather' => $this->weather,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'cars' => $repository->findAll(),
+            'pagination' => $pagination
         ]);
     }
-
     #[Route('/cars/new/', name: 'app_new_car', methods: ['GET','POST'])]
     public function new(Request $request, EntityManagerInterface $manager): Response
     {
@@ -64,8 +69,9 @@ class CarController extends AbstractController
             $carInstance = $form->getData();
             $manager->persist($carInstance);
             $manager->flush();
+
+            return $this->redirectToRoute('app_admin');
         }
-        return $this->redirectToRoute('app_admin');
 
         return $this->render('cars/new.html.twig', [
             'controller_name' => 'CarController',

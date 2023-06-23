@@ -5,7 +5,10 @@ namespace App\Repository;
 use App\Entity\Car;
 use App\Model\SearchData;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\Pagination\PaginationInterface;
+// use Knp\Component\Pager\Pagination\PaginationInterface;
+// use Knp\Component\Pager\Pagination\PaginatorInterface;
+
+use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -18,10 +21,10 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class CarRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Car::class);
-        // $this->paginator = $paginator;
+        $this->paginator = $paginator;
     }
 
     public function save(Car $entity, bool $flush = false): void
@@ -46,10 +49,10 @@ class CarRepository extends ServiceEntityRepository
      * Get published posts thanks to Search Data value
      *
      * @param SearchData $searchData
-    //  * @return PaginationInterface
+     * @return PaginationInterface
      */
 
-    public function findBySearch(SearchData $search): array
+    public function findBySearch(SearchData $search, PaginatorInterface $paginator)
     {
         $data = $this->createQueryBuilder('p')
         ->select('c', 'p')
@@ -65,8 +68,16 @@ class CarRepository extends ServiceEntityRepository
                 ->andWhere('c.id IN (:category)')
                 ->setParameter('category', $search->categories);
         }
-        return $data = $data->getQuery()->getResult();
         
+        $data = $data->getQuery()->getResult();
+
+        $pagination = $this->paginator->paginate(
+            $data,
+            $search->page, 
+            2
+        );
+
+        return $pagination;
     }
 
 //    /**

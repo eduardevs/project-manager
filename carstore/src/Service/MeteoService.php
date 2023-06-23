@@ -13,7 +13,7 @@ class MeteoService
         $this->httpClient = $httpClient;
     }
 
-    public function fetchMeteo()
+    public function fetchMeteo(): array
     {
         $response = $this->httpClient->request('GET', 'https://api.open-meteo.com/v1/forecast?latitude=48.85&longitude=2.35&hourly=temperature_2m&current_weather=true');
 

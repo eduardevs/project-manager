@@ -2,12 +2,14 @@
 
 {% block title %}Register{% endblock %}
 
-{% block content %}
+{% block body %}
 
-    <h1>Register a car</h1>
-
-    <div class="d-flex justify-content-center">
-        {{ include('cars/_form.html.twig') }}     
+    <div class="container">
+        <h1 class="text-center">Register</h1>
+        <div class="d-flex justify-content-center mt-5">
+            {{ include('cars/_form.html.twig') }}     
+        </div>
+         <a href="{{path('app_admin')}}" class="btn btn-secondary">Return</a>
     </div>
 
 {% endblock %}

@@ -1,11 +1,11 @@
 {% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {{ form_start(form, {'attr': {'class': 'd-flex flex-column justify-content-center ml-auto mr-auto'}}) }}
-    {{ form_row(form.name, {'label': 'Model'}) }}
-    {{ form_row(form.cost, {'label': 'Prix'}) }}
-    {{ form_row(form.nbSeats, {'label': 'How many seats ?'}) }}
+    {{ form_row(form.name, {'label': 'Model', 'attr': {'class': 'form-control'}}) }}
+    {{ form_row(form.cost, {'label': 'Prix', 'attr': {'class': 'form-control'}}) }}
+    {{ form_row(form.nbSeats, {'label': 'How many seats ?', 'attr': {'class': 'form-control'}}) }}
     {# <span class="mb-3"><small>Pour ajouter plusieurs images, sélectionner les en cliquant et en maintenant la touche ctrl</small></span> #}
-        {{ form_row(form.nbDoors, {'label': 'How many doors ?'}) }}
+        {{ form_row(form.nbDoors, {'label': 'How many doors ?', 'attr': {'class': 'form-control'}}) }}
 
     {{ form_row(form.category, {'label': 'Catégorie'}) }}
     <button class="btn btn-primary">{{ button_label|default('Update') }}</button>

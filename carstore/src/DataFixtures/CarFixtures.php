@@ -7,17 +7,25 @@ use App\Entity\Car;
 use App\Entity\CarCategory;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class CarFixtures extends Fixture
+class CarFixtures extends Fixture implements DependentFixtureInterface
 {
+    public function getDependencies()
+    {
+        return [
+            CategoryFixtures::class,
+        ];
+    }
+
     public function load(ObjectManager $manager): void
     {
+        $categories = $manager->getRepository(CarCategory::class)->findAll();
         $faker = Factory::create();
 
-        $brands= ['toyota', 'jeep', 'mercedes benz', 'tesla', 'peugeot', 'citroen', 'fiat', 'lambo', 'toto', 'test'];
-        
+
     
-        for($i = 0; $i< 10; $i++) {
+        for($i = 0; $i < 60; $i++) {
             $car= new Car();
             // $category->setName(array_rand($categories));
 
@@ -26,7 +34,7 @@ class CarFixtures extends Fixture
             $car->setNbSeats(rand(1, 5));
             $car->setNbDoors(rand(1, 4));
             $car->setCost(rand(1000, 100000));
-            // $car->setCategory($category->setName('Executive'));
+            $car->setCategory($categories[array_rand($categories)]);
 
             $manager->persist($car);
 
