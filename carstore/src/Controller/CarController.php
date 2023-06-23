@@ -12,13 +12,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\MeteoService;
 
 class CarController extends AbstractController
 {
-    #[Route('/admin/cars', name: 'app_admin', methods: ['GET'])]
+    private MeteoService $meteoService;
+    public $weather;
+
+    public function __construct(MeteoService $meteoService) {
+        $this->meteoService = $meteoService;
+        $this->weather = $this->meteoService->fetchMeteo();
+    }
+
+    #[Route('/', name: 'app_admin', methods: ['GET'])]
     public function index(CarRepository $repository, Request $request): Response
     {
+        // Filters
         $searchData = new SearchData();
+        // Form
         $form = $this->createForm(SearchType::class, $searchData);
         $form->handleRequest($request);
 
@@ -26,20 +37,22 @@ class CarController extends AbstractController
             $searchData->page = $request->query->getInt('page', 1);
             $cars = $repository->findBySearch($searchData);
 
-            return $this->render('admin/cars/index.html.twig', [
+            return $this->render('cars/main.html.twig', [
                 'form' => $form->createView(),
-                'cars' => $cars
+                'cars' => $cars,
+                'weather' => $this->weather,
             ]);
         }
 
-        return $this->render('admin/cars/index.html.twig', [
+        return $this->render('cars/main.html.twig', [
             'controller_name' => 'CarController',
             'cars' => $repository->findAll(),
+            'weather' => $this->weather,
             'form' => $form->createView()
         ]);
     }
 
-    #[Route('/admin/cars/new/', name: 'app_new_car', methods: ['GET','POST'])]
+    #[Route('/cars/new/', name: 'app_new_car', methods: ['GET','POST'])]
     public function new(Request $request, EntityManagerInterface $manager): Response
     {
         $car = new Car();
@@ -52,25 +65,28 @@ class CarController extends AbstractController
             $manager->persist($carInstance);
             $manager->flush();
         }
+        return $this->redirectToRoute('app_admin');
 
-        return $this->render('admin/cars/new.html.twig', [
+        return $this->render('cars/new.html.twig', [
             'controller_name' => 'CarController',
             'form' => $form->createView(),
+            'weather' => $this->weather
         ]);
     }
 
-    #[Route('/admin/cars/{id}', name: 'app_single_car', methods: ['GET'])]
+    #[Route('/cars/{id}', name: 'app_single_car', methods: ['GET'])]
     public function show(CarRepository $carRepository, $id): Response
     {
         $car = $carRepository->find($id);
 
-        return $this->render('admin/cars/car.html.twig', [
+        return $this->render('cars/car.html.twig', [
             'controller_name' => 'CarController',
             'car' => $car,
+            'weather' => $this->weather
         ]);
     }
 
-    #[Route('/admin/cars/edit/{id}', name: 'app_edit_car', methods: ['GET','POST'])]
+    #[Route('/cars/edit/{id}', name: 'app_edit_car', methods: ['GET','POST'])]
     public function edit(CarRepository $carRepository, $id, Request $request, EntityManagerInterface $manager): Response
     {
         $car = $carRepository->find($id);
@@ -91,13 +107,14 @@ class CarController extends AbstractController
             return $this->redirectToRoute('app_admin');
         }
 
-        return $this->render('admin/cars/edit.html.twig', [
+        return $this->render('cars/edit.html.twig', [
             'controller_name' => 'CarController',
             'form' => $form->createView(),
+            'weather' => $this->weather
         ]);
     }
 
-    #[Route('admin/cars/delete/{id}', 'car_delete', methods: ['POST'])]
+    #[Route('/cars/delete/{id}', 'car_delete', methods: ['POST'])]
     public function delete(EntityManagerInterface $manager, CarRepository $carRepository, $id) : Response {   
         $car = $carRepository->find($id); 
         if(!$car) {

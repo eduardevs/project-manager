@@ -1,0 +1,22 @@
+{% if form %}
+	{{ form_start(form) }}
+	
+		<div class="sidebar">
+			<div class="justify-content-center input-group relative flex flex-wrap items-stretch w-full mt-2">
+				{{ form_row(form.q, {'attr': {'class': 'form-control'}}) }}
+				{{ form_errors(form.q) }}
+			</div>
+			<div class="">
+				{{ form_label(form.categories, 'Categories', {'attr': {'class': 'w-25'}}) }}
+				{{ form_row(form.categories, {'attr': {'class': ''}}) }}
+			</div>
+			<div>
+				<button class="btn btn-secondary w-100 mt-3" type="submit" id="button">
+					Filtrer
+				</button>
+			</div>
+		</div>
+	
+	{{ form_end(form) }}
+{% endif %}
+

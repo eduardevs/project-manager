@@ -1,0 +1,14 @@
+.weather_block{
+    /* width: 150px; */
+    position: relative;
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 25px;
+    /* right: 0px; */
+    /* top: -100px; */
+}
+
+
+.sidebar {
+    width: 168px;
+}

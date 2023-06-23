@@ -1,13 +1,13 @@
-{% extends 'base.html.twig' %}
+{% extends 'cars/index.html.twig' %}
 
 {% block title %}Register{% endblock %}
 
-{% block body %}
+{% block content %}
 
     <h1>Register a car</h1>
 
     <div class="d-flex justify-content-center">
-        {{ include('admin/cars/_form.html.twig') }}     
+        {{ include('cars/_form.html.twig') }}     
     </div>
 
 {% endblock %}

@@ -1,40 +1,26 @@
 <?php
+namespace App\Service;
 
-namespace App\Service\MeteoApi;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-use Symfony\Contract\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-
-
-class MeteoService 
+class MeteoService
 {
-    protected HttpClientInterface $client;
-    // protected ParameterBagInterface $parameterBag;
-    // ParameterBagInterface $parameterBag
-    public function __construct(HttpClientInterface $client)
+    private HttpClientInterface $httpClient;
+
+    public function __construct(HttpClientInterface $httpClient)
     {
-        $this->client = $client;
-        // $this->parameterBag = $parameterBag;
+        $this->httpClient = $httpClient;
     }
 
-    public function executeRequest()
+    public function fetchMeteo()
     {
-        $response = $this->client->request(
-            'GET',
-            'https://api.open-meteo.com/v1/forecast?latitude=48.85&longitude=2.35&hourly=temperature_2m&current_weather=true'
-        );
+        $response = $this->httpClient->request('GET', 'https://api.open-meteo.com/v1/forecast?latitude=48.85&longitude=2.35&hourly=temperature_2m&current_weather=true');
 
-
-        $statusCode = $response->getStatusCode();
-        // $statusCode = 200
-        $contentType = $response->getHeaders()['content-type'][0];
-        // $contentType = 'application/json'
         $content = $response->getContent();
-        // $content = '{"id":521583, "name":"symfony-docs", ...}'
-        $content = $response->toArray();
-        // $content = ['id' => 521583, 'name' => 'symfony-docs', ...]
+        $decodedData = json_decode($content, true);
+        $data = array('temp' => $decodedData['current_weather']['temperature'],'code' => $decodedData['current_weather']['weathercode']);
 
-        return $content;
+        return $data;
     }
 }

@@ -1,0 +1,16 @@
+{% extends 'cars/index.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>Edit Car</h1>
+        <div class="d-flex justify-content-center">
+            {{ include('cars/_form.html.twig') }}     
+        </div>
+         <a href="{{path('app_admin')}}" class="btn btn-secondary">Return</a>
+    </div>
+    
+
+{% endblock %}

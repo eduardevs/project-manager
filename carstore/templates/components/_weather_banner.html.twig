@@ -1,0 +1,19 @@
+{% set weatherIcon = '' %}
+
+{% if weather['code'] == "1" %}
+ {% set weatherIcon = 'fa-sun' %}
+        {% elseif weather['code'] == "2" %}
+ {% set weatherIcon = 'fa-cloud' %}
+        {% elseif weather['code'] == "3" %}
+ {% set weatherIcon = 'fa-cloud-sun' %}
+        {% else %}
+            {% set weatherIcon = 'fa-question' %} {# Example icon for unknown weather code #}
+{% endif %}
+
+<div class="row">
+    <div class="bg-primary-subtle weather_block d-flex justify-content-end p-4 align-items-center text-secondary">
+            <h6 class="fs-6 fw-medium text-uppercase mt-1">Weather :</h6>
+            <i class="fas {{ weatherIcon }} ms-1"></i>
+            <span class="ms-2">{{weather['temp']}} °C<span>
+    </div>
+<div>

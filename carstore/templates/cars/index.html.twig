@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    {% include 'components/_weather_banner.html.twig' with { 'weather': weather } %}
+
+       {% block content %}
+       {% endblock %}
+    
+
+{% endblock %}

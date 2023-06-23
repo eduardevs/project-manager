@@ -20,6 +20,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Service\MeteoService:
+        arguments: 
+            $httpClient: '@http_client'
+
     Symfony\Component\Security\Csrf\CsrfTokenManagerInterface:
         alias: security.csrf.token_manager
 
