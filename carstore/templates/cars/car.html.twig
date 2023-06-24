@@ -1,12 +1,7 @@
-{% extends 'cars/index.html.twig' %}
-
-{% block title %}Hello CarController!{% endblock %}
+{% extends 'pages/dashboard.html.twig' %}
 
 {% block content %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+
 <div class="container-fluid">
     <div class="container">
         <div class="d-flex justify-content-center mt-5">
@@ -25,7 +20,6 @@
                 </li>
             </ul>
             {% else %}
-            {# template part here #}
                 <span>Car not found</span>
             {% endif %}
             </div>

@@ -21,10 +21,10 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class CarRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Car::class);
-        $this->paginator = $paginator;
+        // $this->paginator = $paginator;
     }
 
     public function save(Car $entity, bool $flush = false): void
@@ -49,10 +49,10 @@ class CarRepository extends ServiceEntityRepository
      * Get published posts thanks to Search Data value
      *
      * @param SearchData $searchData
-     * @return PaginationInterface
+    //  * @return PaginationInterface
      */
 
-    public function findBySearch(SearchData $search, PaginatorInterface $paginator)
+    public function findBySearch(SearchData $search)
     {
         $data = $this->createQueryBuilder('p')
         ->select('c', 'p')
@@ -71,13 +71,14 @@ class CarRepository extends ServiceEntityRepository
         
         $data = $data->getQuery()->getResult();
 
-        $pagination = $this->paginator->paginate(
-            $data,
-            $search->page, 
-            2
-        );
+        // $pagination = $this->paginator->paginate(
+        //     $data,
+        //     $search->page, 
+        //     2
+        // );
 
-        return $pagination;
+        // return $pagination;
+        return $data;
     }
 
 //    /**

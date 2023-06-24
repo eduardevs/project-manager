@@ -1,0 +1,15 @@
+{% extends 'pages/dashboard.html.twig' %}
+
+{% block title %} Register a Car !{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1 class="text-center mt-5">Register</h1>
+        <div class="p-5 justify-content-center mt-5">
+            {{ include('components/_form.html.twig') }}     
+        </div>
+         <a href="{{path('app_admin')}}" class="btn btn-secondary">Return</a>
+    </div>
+
+{% endblock %}

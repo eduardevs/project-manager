@@ -29,23 +29,29 @@ class CarController extends AbstractController
     #[Route('/', name: 'app_admin', methods: ['GET'])]
     public function index(CarRepository $repository, Request $request, PaginatorInterface $paginator): Response
     {
-        // Filters
-        $searchData = new SearchData();
-        $pagination = $repository->findBySearch($searchData, $paginator);
-        
-        // Form
+        $searchData = new SearchData();  
         $form = $this->createForm(SearchType::class, $searchData);
         $form->handleRequest($request);
+        $data = $repository->findBySearch($searchData);
+        $cars = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1), 20
+        );
     
         if ($form->isSubmitted() && $form->isValid()) {
             $searchData->page = $request->query->getInt('page', 1);
-            $cars = $repository->findBySearch($searchData);
+            $data = $repository->findBySearch($searchData);
+            $cars = $paginator->paginate(
+                $data,
+                $request->query->getInt('page', 1), 20
+            );
+
     
             return $this->render('cars/main.html.twig', [
                 'form' => $form->createView(),
-                'cars' => $repository->findAll(),
+                'cars' => $cars,
                 'weather' => $this->weather,
-                'pagination' => $pagination
+                // 'pagination' => $pagination
             ]);
         }
     
@@ -53,8 +59,8 @@ class CarController extends AbstractController
             'controller_name' => 'CarController',
             'weather' => $this->weather,
             'form' => $form->createView(),
-            'cars' => $repository->findAll(),
-            'pagination' => $pagination
+            'cars' => $cars,
+            // 'pagination' => $pagination
         ]);
     }
     #[Route('/cars/new/', name: 'app_new_car', methods: ['GET','POST'])]
@@ -73,7 +79,7 @@ class CarController extends AbstractController
             return $this->redirectToRoute('app_admin');
         }
 
-        return $this->render('cars/new.html.twig', [
+        return $this->render('cars/create.html.twig', [
             'controller_name' => 'CarController',
             'form' => $form->createView(),
             'weather' => $this->weather

@@ -1,15 +1,15 @@
-{% extends 'cars/index.html.twig' %}
+{% extends 'pages/dashboard.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Update a Car !{% endblock %}
 
 {% block content %}
 
     <div class="container">
-        <h1>Edit Car</h1>
-        <div class="d-flex justify-content-center">
-            {{ include('cars/_form.html.twig') }}     
+        <h1 class="mt-5">Edit Car</h1>
+        <div class="p-5 justify-content-center">
+            {{ include('components/_form.html.twig') }}     
         </div>
-         <a href="{{path('app_admin')}}" class="btn btn-secondary">Return</a>
+         <a href="{{path('app_admin')}}" class="btn btn-secondary mt-5">Return</a>
     </div>
     
 

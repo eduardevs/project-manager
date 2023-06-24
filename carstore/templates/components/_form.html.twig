@@ -1,0 +1,12 @@
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{{ form_start(form, {'attr': {'class': 'd-flex flex-column justify-content-center ml-auto mr-auto'}}) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.cost) }}
+    {{ form_row(form.nbSeats) }}
+    {{ form_errors(form.nbSeats) }} 
+    {{ form_row(form.nbDoors) }}
+    {{ form_row(form.category) }}
+    
+    <button class="btn btn-primary mt-5">{{ button_label|default('Update') }}</button>
+{{ form_end(form) }}
