@@ -17,6 +17,6 @@ To see this small app, make a git clone in your local machine of this url https:
 Therefore, in the root project folder : 
 
 - docker-compose up -d
-- docker exec -it <container_name> /bin/bash -c "cd html && composer install && php bin/console doctrine:database:create && php bin/console doctrine:fixtures:load"
+- docker exec -it carstore_php sh -c "cd html && composer install && php bin/console doctrine:database:create && php bin/console doctrine:fixtures:load"
 
-You should be ready to test this app !
+Now, you should be ready to test this app !
