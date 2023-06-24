@@ -1,3 +1,5 @@
+![Alt text](relative%20/Skill4AllASCII.png?raw=true "Skill4All")
+
 # MY TECHNICAL TEST WITH SKILL4ALL
 
 ## Message to the team:
