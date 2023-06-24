@@ -1,16 +1,17 @@
 # MY TECHNICAL TEST WITH SKILL4ALL
 
-Message to the team:
+## Message to the team:
 Hello there 👋
 
 I really enjoyed this test and i hope to work with you guys!
 
-Description:
+### Description:
 This was made with PHP/Symfony to evaluate my skills with this awesome php framework.
-Requirements :
+
+### Requirements :
 - Docker installed
   
-Instructions:
+### Instructions:
 To see this small app, make a git clone in your local machine of this url https://github.com/jeseduardopi/skill4cars.git.
 Therefore, in the root project folder : 
 
