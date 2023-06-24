@@ -1,4 +1,4 @@
-![Alt text](https://github.com/jeseduardopi/skill4cars/Skill4AllASCII.png?raw=true)
+![Alt text](https://github.com/jeseduardopi/skill4cars/blob/main/Skill4AllASCII.png?raw=true)
 # MY TECHNICAL TEST WITH SKILL4ALL
 
 ## Message to the team:
