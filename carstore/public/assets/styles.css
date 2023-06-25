@@ -1,18 +1,24 @@
 .weather_block{
-    /* width: 150px; */
     position: relative;
     padding-top: 0;
     padding-bottom: 0;
     height: 25px;
-    /* right: 0px; */
-    /* top: -100px; */
 }
-
 
 .sidebar {
-    width: 168px;
+    background-color: rgb(32 91 241 / 10%);
 }
 
-.filter-btn {
+.custom-btn {
     width: 140px;
+    margin: 0 auto;
+}
+
+.col-form-label {
+    font-weight: 650;
+    text-align: center;
+}
+
+.search_categories {
+    margin-left: 10px;
 }

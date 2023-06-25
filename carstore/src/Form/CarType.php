@@ -28,7 +28,8 @@ class CarType extends AbstractType
                 'label' => 'Price',
                 'required'=> true,
                 'attr' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'pattern' => '^\d{1,10}$'
                 ],
             ])
             ->add('nbSeats', NumberType::class, [
