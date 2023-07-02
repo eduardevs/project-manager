@@ -4,19 +4,19 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        container_name: carstore_php
+        container_name: project_manager_php
         restart: on-failure
         ports:
             - "1234:80"
         volumes:
             - ./conf/site.conf:/etc/nginx/http.d/default.conf
-            - ./carstore:/var/www/html
+            - ./project-manager:/var/www/html
         networks:
             - acpSymfony
 
     db:
         image: mariadb:10.8.2
-        container_name: carstore_db
+        container_name: project_manager_db
         restart: always
         volumes:
             - db-data:/var/lib/mysql
@@ -27,7 +27,7 @@ services:
 
     phpmyadmin:
         image: phpmyadmin:latest
-        container_name: carstore_pma
+        container_name: project_manager_pma
         restart: always
         ports:
             - '8080:80'

@@ -1,7 +1,0 @@
-<form method="post" action="{{ path('car_delete', {'id': car.id}) }}"
-    onsubmit="return confirm('Are you sure you want to delete this car from the database?');" class="mx-3">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ car.id) }}">
-    <button class="btn btn-outline-danger">
-        <i class="fas fa-trash"></i>
-    </button>
-</form>
