@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 // Pour permettre la gestion des utilisateurs l'user interface, 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity('email', 'This mail already exists !')]
+#[ORM\EntityListeners(['App\EntityListener\UserListener'])]
 #[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -24,7 +25,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank()]
+    // #[Assert\NotBlank()]
     private string $avatar;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -42,10 +43,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank()]
-    private ?string $password = null;
+    private string $password = 'password';
 
     #[ORM\Column(type: 'json')]
-    #[Assert\NotBlank()]
     private array $roles = ['ROLE_USER'];
 
     
@@ -119,17 +119,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getPlainPassword(): ?string
     {
-        return $this->password;
+        return $this->plainPassword;
     }
 
-    public function setPlainPassword(string $plainPassword): self
+    public function setPlainPassword($plainPassword): self
     {
         $this->plainPassword = $plainPassword;
 
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
