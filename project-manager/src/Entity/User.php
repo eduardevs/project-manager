@@ -11,22 +11,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-// Pour permettre la gestion des utilisateurs l'user interface, 
+#[UniqueEntity('email')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity('email', 'This mail already exists !')]
 #[ORM\EntityListeners(['App\EntityListener\UserListener'])]
-#[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue('CUSTOM')]
-    #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\CustomIdGenerator('doctrine.uuid_generator')]
-    private ?string $id = null;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    // #[Assert\NotBlank()]
-    private string $avatar;
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $firstName = null;
@@ -63,20 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     }
 
-    #[ORM\PrePersist]
-    public function prePersist(): void
-    {
-        $this->avatar = 'https://avatars.dicebear.com/api/big-ears-neutral/'. $this->email .'.svg';
-    }
-
-    #[ORM\PreUpdate]
-    public function preUpdate(): void
-    {
-        $this->avatar = 'https://avatars.dicebear.com/api/big-ears-neutral/'. $this->email .'.svg';
-        $this->updatedAt = new \DateTimeImmutable();
-    }
-
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
     }
