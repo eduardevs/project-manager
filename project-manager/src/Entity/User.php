@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\Mapping as ORM;
@@ -50,9 +52,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotNull()]
     private \DateTimeImmutable $updatedAt;
 
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Task::class, orphanRemoval: true)]
+    private Collection $tasks;
+
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Project::class, orphanRemoval: true)]
+    private Collection $projects;
+
+    #[ORM\ManyToMany(targetEntity: Project::class, inversedBy: 'members')]
+    private Collection $projectAsMember;
+
+    #[ORM\ManyToMany(targetEntity: Task::class, inversedBy: 'assignedTo')]
+    private Collection $assignedTasks;
+
     public function __construct() {
          $this->createdAt = new \DateTimeImmutable();
          $this->updatedAt = new \DateTimeImmutable();
+         $this->tasks = new ArrayCollection();
+         $this->projects = new ArrayCollection();
+         $this->projectAsMember = new ArrayCollection();
+         $this->assignedTasks = new ArrayCollection();
 
     }
 
@@ -146,5 +164,113 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return $this->email;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): static
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): static
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getCreatedBy() === $this) {
+                $task->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): static
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
+            $project->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): static
+    {
+        if ($this->projects->removeElement($project)) {
+            // set the owning side to null (unless already changed)
+            if ($project->getAuthor() === $this) {
+                $project->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getProjectAsMember(): Collection
+    {
+        return $this->projectAsMember;
+    }
+
+    public function addProjectAsMember(Project $projectAsMember): static
+    {
+        if (!$this->projectAsMember->contains($projectAsMember)) {
+            $this->projectAsMember->add($projectAsMember);
+        }
+
+        return $this;
+    }
+
+    public function removeProjectAsMember(Project $projectAsMember): static
+    {
+        $this->projectAsMember->removeElement($projectAsMember);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getAssignedTasks(): Collection
+    {
+        return $this->assignedTasks;
+    }
+
+    public function addAssignedTask(Task $assignedTask): static
+    {
+        if (!$this->assignedTasks->contains($assignedTask)) {
+            $this->assignedTasks->add($assignedTask);
+        }
+
+        return $this;
+    }
+
+    public function removeAssignedTask(Task $assignedTask): static
+    {
+        $this->assignedTasks->removeElement($assignedTask);
+
+        return $this;
     }
 }
