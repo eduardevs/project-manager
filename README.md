@@ -17,3 +17,7 @@ Therefore, in the root project folder :
 - docker exec -it project_manager_php sh -c "cd html && composer install && php bin/console doctrine:database:create && php bin/console doctrine:schema:update --force --no-interaction && php bin/console doctrine:fixtures:load --no-interaction"
 
 ### Now, you should be ready to test this app !
+
+<!-- TODO : -->
+<!-- 1. Add create task form -->
+<!-- 2. Fix add member in project form -->
