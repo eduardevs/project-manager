@@ -5,5 +5,50 @@
 
 {% block body %}
     <h1>Projects</h1>
+        <a class="btn btn-success" href="{{path('app_create_project')}}">New project</a>
+        <div class="col py-3">
+               <table class="table table-bordered">
+            <div class="flash-info">
+                {% for fail in app.flashes('failed') %}
+                    {{ fail }}
+                {% endfor %}
+                {% for bravo in app.flashes('success') %}
+                    {{ bravo }}
+                {% endfor %}
+            </div>
+                <thead>
+                    <tr class="text-center">
+                        <th scope="col" class="p-3">ID</th>
+                        <th scope="col" class="p-3">NAME</th>
+                        <th scope="col" class="p-3">START DATE</th>
+                        <th scope="col" class="p-3">DEADLINE</th>
+                        <th scope="col" class="p-3">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    {% for project in projects %}
+                    <tr class="text-center">
+                        <th scope="row">{{project.id}}</td>
+                        <td>{{project.name}}</td>
+                        <td> {{ project.startDate|date('Y-m-d H:i:s') }}</td>
+                        <td> {{ project.endDate|date('Y-m-d H:i:s') }}</td>
 
+
+                        {# <td>{{project.category ? project.category : 'not defined'}}</td> #}
+                        <td class="d-flex justify-content-center">
+                             <a href="{{path('app_single_project', { id: project.id })}}" class="btn btn-outline-primary mx-3">
+                                <i class="fas fa-eye"></i>
+
+                            </a> 
+                    
+                            {# <a href="{{path('app_edit_project', { id: project.id })}}" class="btn btn-outline-success mx-3">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a> #}
+                       
+                            {# {{ include('components/_delete.html.twig') }} #}
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
 {% endblock %}

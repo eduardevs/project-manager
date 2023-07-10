@@ -37,10 +37,15 @@ class Task
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'assignedTasks')]
     private Collection $assignedTo;
+
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Project $project = null;
     
     public function __construct()
     {
         $this->assignedTo = new ArrayCollection();
+        // $this->created(new \DateTimeImmutable)
     }
 
     public function getId(): ?int
@@ -143,6 +148,18 @@ class Task
         if ($this->assignedTo->removeElement($assignedTo)) {
             $assignedTo->removeAssignedTask($this);
         }
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): static
+    {
+        $this->project = $project;
 
         return $this;
     }

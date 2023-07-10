@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjectRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProjectRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
@@ -38,10 +38,18 @@ class Project
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'projectAsMember')]
     private Collection $members;
 
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class, orphanRemoval: true)]
+    private Collection $tasks;
+
 
     public function __construct()
     {
         $this->members = new ArrayCollection();
+        // DEFAULT
+        $this->status = ['NOT_STARTED'];
+        // $this-> = ['NOT_STARTED'];
+        $this->startDate = new \DateTimeImmutable();
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,12 +122,13 @@ class Project
         return $this->owner;
     }
 
-    public function setOwner(?User $owner): static
+    public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
 
         return $this;
     }
+    
 
     /**
      * @return Collection<int, User>
@@ -128,8 +137,8 @@ class Project
     {
         return $this->members;
     }
-
-    public function addMember(User $member): static
+    // TODO : ADD MEMBER
+    public function addMember(User $member): self
     {
         if (!$this->members->contains($member)) {
             $this->members->add($member);
@@ -143,6 +152,40 @@ class Project
     {
         if ($this->members->removeElement($member)) {
             $member->removeProjectAsMember($this);
+        }
+
+        return $this;
+    }
+
+    public function __toString() {
+        return $this->firstName;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): static
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): static
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getProject() === $this) {
+                $task->setProject(null);
+            }
         }
 
         return $this;

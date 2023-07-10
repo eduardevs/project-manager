@@ -6,8 +6,9 @@ use Faker\Factory;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements OrderedFixtureInterface
 {
 
     public function load(ObjectManager $manager): void
@@ -35,4 +36,10 @@ class UserFixtures extends Fixture
 
         $manager->flush();
     }
+
+    public function getOrder()
+    {
+        return 1; // Set the desired order number here
+    }
+    
 }

@@ -39,6 +39,15 @@ class TaskRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByProjectId($projectId): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.project = :projectId')
+            ->setParameter('projectId', $projectId)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Task[] Returns an array of Task objects
 //     */
