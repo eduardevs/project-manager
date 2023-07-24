@@ -1,22 +1,28 @@
 "use client";
 
+// the google api sends a request mismatch 400 error, which we can handle (nextauth doc) 
+// TODO: Adding in the apis services google [URI de redirection autorisés ] = http://localhost:3000/api/auth/callback/google
+
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Nav = () => {
-    // const { data: session } = useSession();
-    const isUserLoggedIn = true;
+    // next hook useSession
+    const { data: session } = useSession();
+    // const isUserLoggedIn = true;
 
     const [providers, setProviders] = useState(null);
     const [toggleDropdown, setToggleDropdown] = useState(false);
 
     useEffect(() => {
-        (async () => {
+        const setUpProviders = async () => {
             const res = await getProviders();
             setProviders(res);
-        })();
+        };
+
+        setUpProviders();
     }, []);
 
     return (
@@ -34,8 +40,8 @@ const Nav = () => {
 
             {/* Desktop Navigation */}
             <div className='sm:flex hidden'>
-                {/* {session?.user ? ( */}
-                { isUserLoggedIn ? (
+                {/* { isUserLoggedIn ? ( */}
+                {session?.user ? (
                     <div className='flex gap-3 md:gap-5'>
                         <Link href='/create-prompt' className='black_btn'>
                             Create Post
@@ -74,11 +80,14 @@ const Nav = () => {
                     </>
                 )}
             </div>
+            {/* ! BUG */}
+            {/* {alert(session?.user)} */}
+            {/* {alert(providers)} */}
 
             {/* Mobile Navigation */}
             <div className='sm:hidden flex relative'>
-                {/* {session?.user ? ( */}
-                { isUserLoggedIn ? (
+                {/* { isUserLoggedIn ? ( */}
+                {session?.user ? (
                     <div className='flex'>
                         <Image
                             // src={session?.user.image}

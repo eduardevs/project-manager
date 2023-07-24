@@ -1,22 +1,25 @@
 import '@styles/globals.css'
 import Nav from '@components/Nav'
+import Provider from '@components/Provider'
 
 export const metadata = {
-    title: "Prompstify",
-    description: "Découvre et partage AI prompts"
+    title: "Promptify",
+    description: "Créer des projets et partage AI prompts"
 }
 
-const RootLayout = ({children}) => {
+const RootLayout = ({ children }) => {
     return (
         <html lang="fr">
             <body>
-                <div className="main">
-                    <div className="gradient"></div>
-                </div>
-                <main className="app">
-                    <Nav />
-                    {children}
-                </main>
+                <Provider>
+                    <div className="main">
+                        <div className="gradient"></div>
+                    </div>
+                    <main className="app">
+                        <Nav />
+                        {children}
+                    </main>
+                </Provider>
             </body>
         </html>
     )
