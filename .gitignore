@@ -1,1 +1,4 @@
-carstore/vendor
+project-manager/vendor
+client/node_modules
+client/
+client-ssr-test/

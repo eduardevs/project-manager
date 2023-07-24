@@ -11,11 +11,18 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ProjectController extends AbstractController
 {
+    private $serializer;
+    public function __construct(SerializerInterface $serialize)
+    {
+        $this->serializer = $serialize;
+    }
     // Pour gérer les erreurs, l'utiliosation dAuthenticationUtils utils
     #[Route('/', name: 'home_app', methods: ['GET'])]
     public function index(): Response
@@ -27,7 +34,7 @@ class ProjectController extends AbstractController
         ]);
     }
     // ProjectRepository $repository
-    #[Route('/projects', name: 'app_projects', methods: ['GET', 'POST'])]
+    #[Route('/projects', name: 'projects_app', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function show(ProjectRepository $repository): Response
     {
@@ -35,11 +42,16 @@ class ProjectController extends AbstractController
         // Current user
         // $user = $this->getUser();
         $projects = $repository->findAll();
+        $jsonProjects = $serializer->serialize($projects, 'json');
 
-        return $this->render('pages/projects.html.twig', [
-            // 'user' => $user
-            'projects' => $projects
-        ]);
+        // dd($jsonProjects);
+
+        return new JsonResponse($jsonProjects, Response::HTTP_OK, ['accept' => 'json'], true);
+
+        // return $this->render('pages/projects.html.twig', [
+        //     // 'user' => $user
+        //     'projects' => $projects
+        // ]);
     }
 
     #[Route('/project/new', name: 'app_create_project', methods: ['GET', 'POST'])]

@@ -1,4 +1,3 @@
-<!-- ![Alt text](https://github.com/jeseduardopi/skill4cars/blob/main/carstore/public/assets/images/skill4allasciiart.png?raw=true) -->
 # PROJECT MANAGER
 
 ### Description:

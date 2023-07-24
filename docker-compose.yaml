@@ -2,7 +2,7 @@ version: "3.8"
 services:
     alpine:
         build:
-            context: .
+            context: ./project-manager
             dockerfile: Dockerfile
         container_name: project_manager_php
         restart: on-failure
@@ -41,6 +41,37 @@ services:
             - db
         networks:
             - acpSymfony
+            
+    # client:
+    #     image: simple-react
+    #     build:
+    #         context: ./client
+    #         dockerfile: Dockerfile
+    #     container_name: project_manager_client
+    #     volumes:
+    #         - ./client:/app
+    #         - /app/node_modules
+    #     ports:
+    #         - "3000:3000"
+    #     networks:
+    #         - acpSymfony
+    #     environment:
+    #         - WATCHPACK_POLLING=true
+                
+    backoffice:
+        image: next-img
+        build:
+            context: ./client-ssr
+            dockerfile: Dockerfile
+        container_name: project_manager_client_ssr
+        volumes:
+            - ./client-ssr:/app
+            - /app/node_modules
+        ports:
+           - "3000:3000" 
+        networks:
+            - acpSymfony
+            
 
 volumes:
     db-data:
