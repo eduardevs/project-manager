@@ -3,3 +3,10 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+
+task_details:
+    path: /projects/{id}/task/{taskId}
+    controller: App\Controller\TaskController::single
+    methods: [GET] # Adjust the HTTP methods as needed
+

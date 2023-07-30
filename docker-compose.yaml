@@ -42,21 +42,21 @@ services:
         networks:
             - acpSymfony
             
-    # client:
-    #     image: simple-react
-    #     build:
-    #         context: ./client
-    #         dockerfile: Dockerfile
-    #     container_name: project_manager_client
-    #     volumes:
-    #         - ./client:/app
-    #         - /app/node_modules
-    #     ports:
-    #         - "3000:3000"
-    #     networks:
-    #         - acpSymfony
-    #     environment:
-    #         - WATCHPACK_POLLING=true
+    client:
+        image: simple-react-client
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        container_name: project_manager_client
+        volumes:
+            - ./client:/app
+            - /app/node_modules
+        ports:
+            - "3000:3000"
+        networks:
+            - acpSymfony
+        environment:
+            - WATCHPACK_POLLING=true
                 
     backoffice:
         image: next-img
@@ -68,7 +68,7 @@ services:
             - ./client-ssr:/app
             - /app/node_modules
         ports:
-           - "3000:3000" 
+           - "3001:3000" 
         networks:
             - acpSymfony
             

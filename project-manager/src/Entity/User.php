@@ -73,6 +73,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
          $this->assignedTasks = new ArrayCollection();
 
     }
+    public function __toString()
+    {
+        return $this->getFirstName(); // Assuming the entity has a "getUsername()" method.
+    }
 
     public function getId(): ?int
     {

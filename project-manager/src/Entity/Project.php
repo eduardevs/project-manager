@@ -158,7 +158,7 @@ class Project
     }
 
     public function __toString() {
-        return $this->firstName;
+        return $this->name;
     }
 
     /**

@@ -30,7 +30,17 @@ class RegistrationType extends AbstractType
             ])
             ->add('lastName')
             ->add('email')
-            ->add('plainPassword')
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'first_options' => [
+                    'label' => 'Password',
+                ],
+                'second_options' => [
+                    "label" => 'Confirm password'
+                ],
+                'invalid_message' => 'The password does\'nt match !'
+                
+            ])
             // ->add('roles')
             ->add('submit', SubmitType::class)
  

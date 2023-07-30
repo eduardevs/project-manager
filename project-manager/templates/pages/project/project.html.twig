@@ -5,6 +5,7 @@
 <div class="container-fluid">
     <div class="container">
         <div class="d-flex justify-content-center mt-5">
+        {# PROJECT : Recuperation de chaque project avec CRUD = chaque projet avec ses taches #}
             {% if project %}
             <ul>
                 <li><strong>Project's name :</strong> {{project.name}}</li>
@@ -27,14 +28,16 @@
                 {% if tasks %}
                     {% for task in tasks%}
                         <li> 
-                        {{task.title}}
+                        <a >{{task.title}}</a>
+                        <a href="{{path('task_details', { id: project.id, taskId: task.id })}}">{{task.id}}</a>
+
                         </li>
                     {% endfor %}
                 {% else %}
                     <span>No tasks !<span>
                 {% endif %}
                 </ul>
-                <a href="" class="btn btn-primary">Create task</a>
+                <a href="{{path('create_task', { id: project.id })}}" class="btn btn-primary">Create task</a>
             </div>
             {% else %}
                 <span>Project not found</span>

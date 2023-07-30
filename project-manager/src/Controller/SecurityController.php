@@ -15,7 +15,7 @@ class SecurityController extends AbstractController
 {
     // Pour gérer les erreurs, l'utiliosation dAuthenticationUtils utils
     #[Route('/connexion', name: 'security.login', methods: ['GET', 'POST'])]
-    public function login(AuthenticationUtils $utils): Response
+    public function login(AuthenticationUtils $utils, Request $request): Response
     {
         // si le mot de passe est mauvais.
         $error = $utils->getLastAuthenticationError();
@@ -26,6 +26,8 @@ class SecurityController extends AbstractController
             'last_username' => $lastUsername
         ]);
     }
+
+
 
     #[Route('/deconnexion', name: 'security.logout', methods: ['GET'])]
     public function logout()

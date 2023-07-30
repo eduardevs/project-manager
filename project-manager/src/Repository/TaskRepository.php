@@ -48,6 +48,11 @@ class TaskRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findTaskById(int $taskId): ?Task
+    {
+        return $this->find($taskId);
+    }
+
 //    /**
 //     * @return Task[] Returns an array of Task objects
 //     */

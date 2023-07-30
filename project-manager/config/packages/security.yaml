@@ -19,7 +19,7 @@ security:
             form_login:
                 login_path: security.login
                 check_path: security.login
-                default_target_path: projects_app
+                default_target_path: app_projects
             logout:
                 path: security.logout
 

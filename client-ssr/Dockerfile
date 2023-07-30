@@ -13,7 +13,7 @@ RUN yarn
 # Copy the rest of the application files to the working directory
 COPY . .
 
-EXPOSE 3000
+EXPOSE 3001
 
 # Set the command to start the server
 CMD [ "yarn" , "dev"]

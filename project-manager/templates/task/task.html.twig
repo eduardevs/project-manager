@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Im a task{% endblock %}
+
+{% block body %}
+
+
+
+<h1>{{ task.title }}<h1>
+<p>{{task.description}}</p>
+{# <p>{{task.status}}</p> #}
+<a href="{{path('app_single_project', {id: projectId})}}" class="btn btn-secondary">Return</a>
+
+</div>
+{% endblock %}
