@@ -7,6 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+// use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
@@ -14,31 +17,40 @@ class Project
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['project_details'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['project_details'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['project_details'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['project_details'])]
     private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups(['project_details'])]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\Column(type: Types::ARRAY)]
     private array $status = [];
 
-    #[ORM\ManyToOne(inversedBy: 'projects')]
+    #[ORM\ManyToOne(inversedBy: 'projects', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['project_details'])]
     private ?User $owner = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'projectAsMember')]
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'projectAsMember', fetch: 'EAGER')]
+    #[Groups(['project_details'])]
     private Collection $members;
+    
 
-    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Task::class, orphanRemoval: true, fetch: 'EAGER')]
+    #[Groups(['project_details'])]
     private Collection $tasks;
 
 

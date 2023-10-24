@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 use App\Repository\TaskRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,32 +16,41 @@ class Task
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['project_details'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['project_details'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['project_details'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['project_details'])]
     private ?\DateTimeInterface $dueDate = null;
 
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[Groups(['project_details'])]
     private array $priority = [];
 
     #[ORM\Column(type: Types::ARRAY)]
+    #[Groups(['project_details'])]
     private array $status = [];
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['project_details'])]
     private ?User $createdBy = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'assignedTasks')]
+    #[Groups(['project_details'])]
     private Collection $assignedTo;
 
-    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\ManyToOne(inversedBy: 'tasks', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['project_details'])]
     private ?Project $project = null;
     
     public function __construct()

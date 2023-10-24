@@ -5,13 +5,14 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
-use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[UniqueEntity('email')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -21,17 +22,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['user_details'])]
     private ?int $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['user_details'])]
     private ?string $firstName = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['user_details'])]
     private ?string $lastName = null;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     #[Assert\NotBlank()]
     #[Assert\Email()]
+    #[Groups(['user_details'])]
     private ?string $email;
 
     private ?string $plainPassword = null;
@@ -41,6 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $password = 'password';
 
     #[ORM\Column(type: 'json')]
+    #[Groups(['user_details'])]
     private array $roles = ['ROLE_USER'];
 
     
@@ -52,16 +58,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotNull()]
     private \DateTimeImmutable $updatedAt;
 
-    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Task::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Task::class, orphanRemoval: true, fetch:'EAGER')]
     private Collection $tasks;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Project::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Project::class, orphanRemoval: true, fetch:'EAGER')]
     private Collection $projects;
 
-    #[ORM\ManyToMany(targetEntity: Project::class, inversedBy: 'members')]
+    #[ORM\ManyToMany(targetEntity: Project::class, inversedBy: 'members', fetch:'EAGER')]
     private Collection $projectAsMember;
 
-    #[ORM\ManyToMany(targetEntity: Task::class, inversedBy: 'assignedTo')]
+    #[ORM\ManyToMany(targetEntity: Task::class, inversedBy: 'assignedTo', fetch:'EAGER')]
     private Collection $assignedTasks;
 
     public function __construct() {
